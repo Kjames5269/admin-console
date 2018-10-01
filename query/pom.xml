@@ -32,5 +32,6 @@
         <module>utils</module>
         <module>app</module>
         <module>dev</module>
+        <module>graphql-upgrade-test</module>
     </modules>
 </project>

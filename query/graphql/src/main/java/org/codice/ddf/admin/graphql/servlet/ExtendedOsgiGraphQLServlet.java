@@ -33,7 +33,7 @@ import graphql.servlet.GraphQLErrorHandler;
 import graphql.servlet.GraphQLMutationProvider;
 import graphql.servlet.GraphQLProvider;
 import graphql.servlet.GraphQLQueryProvider;
-import graphql.servlet.OsgiGraphQLServlet;
+import graphql.servlet.OsgiGraphQLHttpServlet;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,7 +60,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("squid:S2226" /* private variables need to remain non-static and/or non-final */)
-public class ExtendedOsgiGraphQLServlet extends OsgiGraphQLServlet implements EventHandler {
+public class ExtendedOsgiGraphQLServlet extends OsgiGraphQLHttpServlet implements EventHandler {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ExtendedOsgiGraphQLServlet.class);
   private static final long CACHE_EXPIRATION_IN_SECONDS = 1;
@@ -128,12 +128,12 @@ public class ExtendedOsgiGraphQLServlet extends OsgiGraphQLServlet implements Ev
   }
 
   @Override
-  protected ExecutionStrategyProvider getExecutionStrategyProvider() {
+  public ExecutionStrategyProvider getExecutionStrategyProvider() {
     return execStrategy;
   }
 
   @Override
-  protected GraphQLErrorHandler getGraphQLErrorHandler() {
+  public GraphQLErrorHandler getErrorHandler() {
     return errorHandler;
   }
 
