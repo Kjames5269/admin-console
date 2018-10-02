@@ -11,7 +11,7 @@
  * License is distributed along with this program and can be found at
  * <http://www.gnu.org/licenses/lgpl.html>.
  */
-package org.codice.ddf.admin.graphql;
+package org.codice.ddf.admin.query.graphql.transform;
 
 import graphql.schema.GraphQLType;
 import graphql.servlet.GraphQLTypesProvider;

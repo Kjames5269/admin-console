@@ -11,7 +11,7 @@
  * License is distributed along with this program and can be found at
  * <http://www.gnu.org/licenses/lgpl.html>.
  */
-package org.codice.ddf.admin.graphql.transform;
+package org.codice.ddf.admin.query.graphql.transform;
 
 import com.google.common.collect.ImmutableList;
 import graphql.schema.DataFetchingEnvironment;
@@ -35,7 +35,7 @@ import org.codice.ddf.admin.api.fields.ListField;
 import org.codice.ddf.admin.api.fields.ObjectField;
 import org.codice.ddf.admin.api.fields.ScalarField;
 import org.codice.ddf.admin.api.report.FunctionReport;
-import org.codice.ddf.admin.graphql.GraphQLTypesProviderImpl;
+import org.codice.ddf.admin.query.graphql.FunctionDataFetcherException;
 
 public class GraphQLTransformOutput {
 

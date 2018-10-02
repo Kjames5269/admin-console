@@ -11,21 +11,22 @@
  * License is distributed along with this program and can be found at
  * <http://www.gnu.org/licenses/lgpl.html>.
  */
-package org.codice.ddf.admin.graphql.transform;
+package org.codice.ddf.admin.query.graphql.transform;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang.StringUtils;
+import org.codice.ddf.admin.api.FieldProvider;
+import org.codice.ddf.admin.api.fields.FunctionField;
 
 import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
-import graphql.servlet.GraphQLQueryProvider;
-import graphql.servlet.GraphQLTypesProvider;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import org.apache.commons.lang.StringUtils;
-import org.codice.ddf.admin.api.FieldProvider;
-import org.codice.ddf.admin.api.fields.FunctionField;
+import graphql.servlet.GraphQLProvider;
 
 public class GraphQLTransformCommons {
 
@@ -35,15 +36,34 @@ public class GraphQLTransformCommons {
     transformOutput = new GraphQLTransformOutput();
   }
 
-  public List<GraphQLFieldDefinition> fieldProviderToMutations(FieldProvider provider) {
+  public static GraphQLProvider createGraphQLProvider(List<FieldProvider> providers) {
+    return new GraphQLTransformCommons().fieldProvidersToGraphQlProvider(providers);
+  }
+
+  public GraphQLProvider fieldProvidersToGraphQlProvider(List<FieldProvider> providers) {
+    List<GraphQLFieldDefinition> queries = providers.stream().map(this::fieldProviderToQueries).flatMap(List::stream).collect(
+            Collectors.toList());
+    GraphQLFieldDefinition errorDefinitions = getErrorCodesQueryProvider(providers);
+    if(errorDefinitions != null) {
+      queries.add(getErrorCodesQueryProvider(providers));
+    }
+
+    List<GraphQLFieldDefinition> mutations = providers.stream().map(this::fieldProviderToMutations).flatMap(List::stream).collect(
+            Collectors.toList());
+
+
+    return new GraphQLProviderImpl(queries, mutations);
+  }
+
+  private List<GraphQLFieldDefinition> fieldProviderToMutations(FieldProvider provider) {
     return transformOutput.functionsToGraphQLFieldDefinition(provider.getMutationFunctions());
   }
 
-  public List<GraphQLFieldDefinition> fieldProviderToQueries(FieldProvider provider) {
+  private List<GraphQLFieldDefinition> fieldProviderToQueries(FieldProvider provider) {
     return transformOutput.fieldsToGraphQLFieldDefinition(Arrays.asList(provider));
   }
 
-  public GraphQLQueryProvider getErrorCodesQueryProvider(List<FieldProvider> fieldProviders) {
+  private GraphQLFieldDefinition getErrorCodesQueryProvider(List<FieldProvider> fieldProviders) {
     Set<String> errorCodes = new TreeSet<>();
 
     for (FieldProvider fieldProvider : fieldProviders) {
@@ -68,21 +88,15 @@ public class GraphQLTransformCommons {
     errorCodes.forEach(enumTypeBuilder::value);
     GraphQLEnumType errorCodeEnumType = enumTypeBuilder.build();
 
-    return () ->
-        Collections.singletonList(
-            GraphQLFieldDefinition.newFieldDefinition()
-                .name("errorCodes")
-                .description("Returns all the possible error codes from the graphQL schema.")
-                .type(GraphQLList.list(errorCodeEnumType))
-                .dataFetcher(dataFetchingEnvironment -> errorCodes)
-                .build());
+    return GraphQLFieldDefinition.newFieldDefinition()
+            .name("errorCodes")
+            .description("Returns all the possible error codes from the graphQL schema.")
+            .type(GraphQLList.list(errorCodeEnumType))
+            .dataFetcher(dataFetchingEnvironment -> errorCodes)
+            .build();
   }
 
-  public static String capitalize(String str) {
+  static String capitalize(String str) {
     return StringUtils.capitalize(str);
-  }
-
-  public List<GraphQLTypesProvider> getGraphQlTypeProviders() {
-    return transformOutput.getTypeProviders();
   }
 }

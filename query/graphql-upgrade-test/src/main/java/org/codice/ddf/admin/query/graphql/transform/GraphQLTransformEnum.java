@@ -11,13 +11,12 @@
  * License is distributed along with this program and can be found at
  * <http://www.gnu.org/licenses/lgpl.html>.
  */
-package org.codice.ddf.admin.graphql.transform;
+package org.codice.ddf.admin.query.graphql.transform;
 
 import graphql.schema.GraphQLEnumType;
 import graphql.servlet.GraphQLTypesProvider;
 import org.codice.ddf.admin.api.fields.EnumField;
 import org.codice.ddf.admin.api.fields.EnumValue;
-import org.codice.ddf.admin.graphql.GraphQLTypesProviderImpl;
 
 public class GraphQLTransformEnum {
 

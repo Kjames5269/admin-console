@@ -16,7 +16,7 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
 
-    <feature name="admin-query-app" install="auto" version="${project.version}"
+    <feature name="admin-query-app" install="manual" version="${project.version}"
              description="DDF Admin Query App includes a source setup wizard, LDAP setup wizard and a GUI for the web context policy manager. Go to /admin/hub to access the UI.">
         <feature>admin-query-federation</feature>
         <feature>admin-query-security</feature>
@@ -95,13 +95,17 @@
         <bundle>mvn:com.graphql-java/java-dataloader/2.0.2</bundle>
         <bundle>mvn:org.reactivestreams/reactive-streams/1.0.2</bundle>
     </feature>
-    <feature name="graphql-java-servlet" install="manual" version="${project.version}"
+
+    <feature name="graphql-java-servlet" install="auto" version="${project.version}"
              description="Required dependencies for admin-query-graphql">
         <feature>graphql-java</feature>
         <bundle>mvn:com.fasterxml.jackson.core/jackson-core/2.8.11</bundle>
         <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/2.8.11</bundle>
         <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/2.8.11</bundle>
         <bundle>mvn:com.fasterxml.jackson.datatype/jackson-datatype-jdk8/2.8.11</bundle>
-        <bundle>mvn:javax.servlet/javax.servlet-api/4.0.0</bundle>
+        <!--<bundle>mvn:javax.servlet/javax.servlet-api/4.0.0</bundle>-->
+        <!--<bundle>wrap:mvn:com.graphql-java/graphql-java-servlet/6.1.3$overwrite=merge&amp;Import-Package=*,javax.servlet*;version="[3.1.0,3.2.0)"</bundle>-->
+        <!--bundle:install 'wrap:mvn:com.graphql-java/graphql-java-servlet/6.1.3$overwrite=merge&Import-Package=*,javax.servlet*;version="[3.1.0,3.2.0)"'-->
+        <bundle>mvn:com.graphql-java/graphql-java-servlet/6.1.3</bundle>
     </feature>
 </features>
