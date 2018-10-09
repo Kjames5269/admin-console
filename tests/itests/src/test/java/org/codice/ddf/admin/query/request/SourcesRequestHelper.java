@@ -13,6 +13,9 @@
  */
 package org.codice.ddf.admin.query.request;
 
+import static org.awaitility.Awaitility.await;
+import static org.codice.ddf.test.common.options.TestResourcesOptions.getTestResource;
+
 import com.jayway.restassured.response.ExtractableResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,14 +47,14 @@ public class SourcesRequestHelper {
     requestFactory =
         new GraphQlHelper(
             WcpmRequestHelper.class,
-            SOURCES_QUERY_RESOURCE_PATH,
-            SOURCES_MUTATION_RESOURCE_PATH,
+                getTestResource(SOURCES_QUERY_RESOURCE_PATH),
+                getTestResource(SOURCES_MUTATION_RESOURCE_PATH),
             graphQlEndpoint);
   }
 
   public void waitForSourcesInSchema() {
-    WaitCondition.expect("get sources in schema.")
-        .within(30L, TimeUnit.SECONDS)
+    await("get sources in schema.")
+        .atMost(30L, TimeUnit.SECONDS)
         .until(
             () -> {
               LOGGER.info("Waiting for sources in graphql schema.");
@@ -132,8 +135,8 @@ public class SourcesRequestHelper {
   }
 
   public void waitForCswSource(Map<String, Object> expectedConfig, boolean ignorePid) {
-    WaitCondition.expect("Failed to retrieve expect CSW sources")
-        .within(30L, TimeUnit.SECONDS)
+    await("Failed to retrieve expect CSW sources")
+        .atMost(30L, TimeUnit.SECONDS)
         .until(
             () -> {
               List<Map<String, Object>> currentCswSources = getSources(SourceType.CSW);
@@ -150,8 +153,8 @@ public class SourcesRequestHelper {
   }
 
   public void waitForOpenSearch(Map<String, Object> expectedConfig, boolean ignorePid) {
-    WaitCondition.expect("Failed to retrieve expected OpenSearch source")
-        .within(30L, TimeUnit.SECONDS)
+    await("Failed to retrieve expected OpenSearch source")
+        .atMost(30L, TimeUnit.SECONDS)
         .until(
             () -> {
               List<Map<String, Object>> currentOpenSearchSources =
@@ -169,8 +172,8 @@ public class SourcesRequestHelper {
   }
 
   public void waitForWfsSource(Map<String, Object> expectedConfig, boolean ignorePid) {
-    WaitCondition.expect("Failed to retrieve expect WFS sources")
-        .within(30L, TimeUnit.SECONDS)
+    await("Failed to retrieve expect WFS sources")
+        .atMost(30L, TimeUnit.SECONDS)
         .until(
             () -> {
               List<Map<String, Object>> currentWfsSources = getSources(SourceType.WFS);

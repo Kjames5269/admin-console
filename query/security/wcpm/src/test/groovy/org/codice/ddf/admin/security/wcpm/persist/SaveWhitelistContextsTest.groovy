@@ -21,7 +21,7 @@ import org.codice.ddf.admin.common.report.message.DefaultMessages
 import org.codice.ddf.admin.configurator.Configurator
 import org.codice.ddf.admin.configurator.ConfiguratorFactory
 import org.codice.ddf.admin.configurator.OperationReport
-import org.codice.ddf.admin.security.common.services.PolicyManagerServiceProperties
+import org.codice.ddf.admin.security.wcpm.PolicyManagerServiceProperties
 import org.codice.ddf.admin.security.wcpm.WcpmFieldProvider
 import org.codice.ddf.internal.admin.configurator.actions.ServiceActions
 import org.codice.ddf.internal.admin.configurator.actions.ServiceReader

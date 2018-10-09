@@ -13,6 +13,8 @@
  */
 package org.codice.ddf.admin.query.request;
 
+import static org.awaitility.Awaitility.await;
+import static org.codice.ddf.test.common.options.TestResourcesOptions.getTestResource;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -22,10 +24,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
 import org.boon.Boon;
 import org.codice.ddf.admin.comp.graphql.GraphQlHelper;
 import org.codice.ddf.admin.ldap.fields.config.LdapConfigurationField;
-import org.codice.ddf.itests.common.WaitCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,14 +45,14 @@ public class LdapRequestHelper {
     requestFactory =
         new GraphQlHelper(
             LdapRequestHelper.class,
-            LDAP_QUERY_RESOURCE_PATH,
-            LDAP_MUTATION_RESOURCE_PATH,
+                getTestResource(LDAP_QUERY_RESOURCE_PATH),
+                getTestResource(LDAP_MUTATION_RESOURCE_PATH),
             graphQlEndpoint);
   }
 
   public void waitForLdapInSchema() {
-    WaitCondition.expect("Ldap appears in schema.")
-        .within(30L, TimeUnit.SECONDS)
+    await("Ldap appears in schema.")
+        .atMost(30L, TimeUnit.SECONDS)
         .until(
             () -> {
               LOGGER.info("Waiting for ldap to appear in graphql schema.");
@@ -69,8 +71,8 @@ public class LdapRequestHelper {
   }
 
   public void waitForConfigs(List<Map<String, Object>> expectedConfigs, boolean ignorePid) {
-    WaitCondition.expect("Successfully retrieved Ldap configuration.")
-        .within(30L, TimeUnit.SECONDS)
+    await("Successfully retrieved Ldap configuration.")
+        .atMost(30L, TimeUnit.SECONDS)
         .until(
             () -> {
               List<Map<String, Object>> retrievedConfigs = getLdapConfigs();

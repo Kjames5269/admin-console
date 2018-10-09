@@ -1,0 +1,16 @@
+query TestRequiredArgs($stringArg: String, $integerArg: Int, $booleanArg: Boolean, $listArg: [String], $enumArg: Enumeration, $innerObjectArg: InnerTestObjectField, $hiddenFieldArg: String) {
+  testing {
+    requiredArg(testObj: {string: $stringArg, integer: $integerArg, boolean: $booleanArg, list: $listArg, enumeration: $enumArg, innerObjectField: $innerObjectArg, testHidden: $hiddenFieldArg}) {
+      string
+      integer
+      boolean
+      list
+      enumeration
+      innerObjectField {
+        testSubField
+        testHidden
+      }
+      testHidden
+    }
+  }
+}

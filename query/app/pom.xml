@@ -12,7 +12,9 @@
  *
  **/
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>admin-query</artifactId>
         <groupId>org.codice.ddf.admin.query</groupId>
@@ -20,9 +22,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>admin-query-app</artifactId>
-    <name>DDF :: Admin Console :: Query :: App</name>
-    <packaging>pom</packaging>
+    <groupId>ddf.features</groupId>
+    <artifactId>admin-query</artifactId>
+    <name>DDF :: Admin Console :: Query :: Feature</name>
+    <packaging>feature</packaging>
 
     <dependencies>
         <dependency>
@@ -30,7 +33,6 @@
             <artifactId>admin-query-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.codice.ddf.admin.query</groupId>
             <artifactId>admin-query-sources-impl</artifactId>
@@ -53,20 +55,9 @@
         </dependency>
         <dependency>
             <groupId>org.codice.ddf.admin.query</groupId>
-            <artifactId>admin-query-utils</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codice.ddf.admin.query</groupId>
             <artifactId>admin-ui</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.codice.ddf.admin.query</groupId>
-            <artifactId>admin-graphql</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>ddf.catalog.core</groupId>
             <artifactId>catalog-core-api</artifactId>
@@ -83,134 +74,112 @@
             <version>${project.version}</version>
         </dependency>
 
-
-
-
-
-            <!--remove these-->
         <dependency>
-            <groupId>org.ops4j.pax.web</groupId>
-            <artifactId>pax-web-jsp</artifactId>
-            <version>7.0.0</version>
+            <groupId>ddf.platform</groupId>
+            <artifactId>sync-installer-api</artifactId>
+            <version>${ddf.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.ops4j.pax.web</groupId>
-            <artifactId>pax-web-extender-whiteboard</artifactId>
-            <version>7.0.0</version>
+            <groupId>org.codice.ddf</groupId>
+            <artifactId>kernel</artifactId>
+            <version>${ddf.version}</version>
+            <type>zip</type>
+            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.ops4j.pax.web</groupId>
-            <artifactId>pax-web-api</artifactId>
-            <version>7.0.0</version>
+            <groupId>ddf.lib</groupId>
+            <artifactId>test-common</artifactId>
+            <version>${ddf.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.ops4j.pax.web</groupId>
-            <artifactId>pax-web-spi</artifactId>
-            <version>7.0.0</version>
+            <groupId>ddf.features</groupId>
+            <artifactId>test-utilities</artifactId>
+            <version>${ddf.version}</version>
+            <type>xml</type>
+            <classifier>features</classifier>
+            <scope>test</scope>
         </dependency>
     </dependencies>
+    <!--TODO - fix kar and deploy-->
+
     <build>
+        <testResources>
+            <testResource>
+                <directory>${project.build.outputDirectory}</directory>
+                <targetPath>${project.build.testOutputDirectory}</targetPath>
+            </testResource>
+        </testResources>
         <plugins>
+            <!--Using 2.5.2 because 3.0+ is incompatible with the karaf-maven-plugin when the feature packaging is specified-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <version>3.0.2</version>
-                <artifactId>maven-resources-plugin</artifactId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.servicemix.tooling</groupId>
+                <artifactId>depends-maven-plugin</artifactId>
+                <version>1.2</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
-                        <phase>generate-resources</phase>
+                        <id>generate-depends-file</id>
                         <goals>
-                            <goal>copy-resources</goal>
+                            <goal>generate-depends-file</goal>
                         </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/classes</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/resources</directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.karaf.tooling</groupId>
                 <artifactId>karaf-maven-plugin</artifactId>
-                <version>${karaf.version}</version>
-                <executions>
-                    <execution>
-                        <id>kar</id>
-                        <goals>
-                            <goal>kar</goal>
-                        </goals>
-                        <configuration>
-                            <!-- Workaround to prevent features.xml file from being included twice in the kar file. -->
-                            <resourcesDir>${project.build.directory}/doesNotExist</resourcesDir>
-                            <featuresFile>${basedir}/target/classes/features.xml</featuresFile>
-                        </configuration>
-                    </execution>
-                </executions>
+                <version>4.2.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <outputFile>${project.build.outputDirectory}/features.xml</outputFile>
+                </configuration>
             </plugin>
-            <!-- Puts the features XML file for this app into the maven repo. -->
+
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.0.0</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
                 <executions>
                     <execution>
-                        <id>attach-artifacts</id>
-                        <phase>package</phase>
-                        <inherited>false</inherited>
                         <goals>
-                            <goal>attach-artifact</goal>
+                            <goal>testResources</goal>
                         </goals>
-                        <configuration>
-                            <artifacts>
-                                <artifact>
-                                    <file>target/classes/features.xml</file>
-                                    <type>xml</type>
-                                    <classifier>features</classifier>
-                                </artifact>
-                            </artifacts>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
                 <executions>
                     <execution>
-                        <id>default-check</id>
                         <goals>
-                            <goal>check</goal>
+                            <goal>testCompile</goal>
                         </goals>
-                        <configuration>
-                            <haltOnFailure>true</haltOnFailure>
-                            <rules>
-                                <rule>
-                                    <element>BUNDLE</element>
-                                    <limits>
-                                        <limit>
-                                            <counter>INSTRUCTION</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0.00</minimum>
-                                        </limit>
-                                        <limit>
-                                            <counter>BRANCH</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0.00</minimum>
-                                        </limit>
-                                        <limit>
-                                            <counter>COMPLEXITY</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0.00</minimum>
-                                        </limit>
-                                    </limits>
-                                </rule>
-                            </rules>
-                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <!--Using version 2.17 instead of the latest (2.19.1) because everything after 2.17 has-->
+                <!--problems connecting to the container or running the tests-->
+                <version>2.17</version>
+                <configuration>
+                    <argLine>-Djava.awt.headless=true -noverify</argLine>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

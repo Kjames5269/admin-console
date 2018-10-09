@@ -23,27 +23,17 @@
     <artifactId>tests</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>org.codice.ddf.admin.query</groupId>
+            <artifactId>itest-commons</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
         <!--Feature file dependencies-->
         <dependency>
-            <groupId>org.codice.ddf.admin.query</groupId>
-            <artifactId>admin-query-ldap</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codice.ddf.admin.query</groupId>
-            <artifactId>admin-query-app</artifactId>
-            <version>${project.version}</version>
-            <classifier>features</classifier>
-            <type>xml</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codice.ddf.admin.query</groupId>
-            <artifactId>commons</artifactId>
-            <version>${project.version}</version>
-            <classifier>features</classifier>
-            <type>xml</type>
+            <groupId>ddf.platform</groupId>
+            <artifactId>sync-installer-api</artifactId>
+            <version>${ddf.version}</version>
             <scope>test</scope>
         </dependency>
         <!--Feature file dependencies end-->
@@ -76,6 +66,21 @@
         <!--ddf dependencies end-->
 
         <dependency>
+            <groupId>ddf.thirdparty</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${ddf.version}</version>
+            <type>xml</type>
+            <classifier>feature</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ddf.features</groupId>
+            <artifactId>admin-query</artifactId>
+            <version>${project.version}</version>
+            <type>xml</type>
+            <classifier>features</classifier>
+        </dependency>
+        <dependency>
             <groupId>org.codice.ddf.admin.query</groupId>
             <artifactId>admin-graphql</artifactId>
             <version>${project.version}</version>
@@ -88,33 +93,26 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.codice.ddf.admin.query</groupId>
-            <artifactId>commons</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codice.ddf.admin.query</groupId>
-            <artifactId>admin-query-sources-common</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>ddf.catalog.core</groupId>
-            <artifactId>catalog-core-standardframework</artifactId>
+            <groupId>ddf.features</groupId>
+            <artifactId>test-utilities</artifactId>
             <version>${ddf.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>2.1.0</version>
+            <type>xml</type>
+            <classifier>features</classifier>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
+        <testResources>
+            <testResource>
+                <directory>${project.build.outputDirectory}</directory>
+                <targetPath>${project.build.testOutputDirectory}</targetPath>
+            </testResource>
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
+                <targetPath>${project.build.testOutputDirectory}</targetPath>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.apache.servicemix.tooling</groupId>
@@ -216,7 +214,7 @@
                         TODO - Re-enable and fix component tests once feature file refactoring has been completed.
                         see: https://github.com/codice/ddf/pull/2896
                     -->
-                    <skipITs>true</skipITs>
+                    <!--<skipITs>true</skipITs>-->
                     <argLine>-Djava.awt.headless=true -noverify</argLine>
                 </configuration>
                 <executions>

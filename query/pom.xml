@@ -26,12 +26,11 @@
     <modules>
         <module>api</module>
         <module>common</module>
-        <module>graphql</module>
+        <!--<module>graphql</module>-->
         <module>sources</module>
         <module>security</module>
-        <module>utils</module>
         <module>app</module>
         <module>dev</module>
-        <module>graphql-upgrade-test</module>
+        <module>graphql-transformer</module>
     </modules>
 </project>

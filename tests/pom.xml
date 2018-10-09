@@ -71,7 +71,7 @@
         <!-- End of pax exam dependencies -->
     </dependencies>
     <modules>
+        <module>itest-commons</module>
         <module>itests</module>
-        <module>commons</module>
     </modules>
 </project>
