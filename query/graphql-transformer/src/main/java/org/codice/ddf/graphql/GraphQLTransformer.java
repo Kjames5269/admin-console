@@ -41,6 +41,7 @@ public class GraphQLTransformer implements EventHandler {
   private ScheduledExecutorService scheduler;
   private Cache<String, Object> cache;
   private BundleContext bundleContext;
+  private GraphQLProvider graphQLProvider;
   private ServiceRegistration<GraphQLProvider> graphQlProviderServiceReg;
 
   public GraphQLTransformer(BundleContext bundleContext, List<FieldProvider> fieldProviders) {
@@ -67,14 +68,14 @@ public class GraphQLTransformer implements EventHandler {
 
   public void destroy() {
     scheduler.shutdownNow();
-    unregisterGraphQLProvider();
   }
 
   public void registerGraphQLProvider() {
+    graphQLProvider = GraphQLTransformCommons.createGraphQLProvider(fieldProviders);
     graphQlProviderServiceReg =
         bundleContext.registerService(
             GraphQLProvider.class,
-            GraphQLTransformCommons.createGraphQLProvider(fieldProviders),
+                graphQLProvider,
             null);
   }
 

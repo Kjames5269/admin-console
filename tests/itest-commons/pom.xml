@@ -20,7 +20,7 @@
     <version>1.3.0-SNAPSHOT</version>
   </parent>
   <artifactId>itest-commons</artifactId>
-  <name>DDF :: Admin Console :: Tests :: Commons</name>
+  <name>DDF :: Admin Console :: ITests :: Commons</name>
   <packaging>bundle</packaging>
 
   <dependencies>
@@ -66,6 +66,11 @@
       <artifactId>test-common</artifactId>
       <version>${ddf.version}</version>
     </dependency>
+    <dependency>
+      <groupId>ddf.thirdparty</groupId>
+      <artifactId>rest-assured</artifactId>
+      <version>${ddf.version}</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -79,6 +84,7 @@
             </Bundle-SymbolicName>
             <Bundle-Name>${project.name}</Bundle-Name>
             <Import-Package>
+              com.jayway.restassured.*,
               *;resolution:=optional
             </Import-Package>
             <Export-Package>

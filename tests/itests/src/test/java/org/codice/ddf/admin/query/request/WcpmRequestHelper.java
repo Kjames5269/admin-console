@@ -57,7 +57,7 @@ public class WcpmRequestHelper {
             graphQlEndpoint);
   }
 
-  public void waitForWcpmInSchema() {
+  public void saveWhitelistDefaultValues() {
     await("getWhiteList appears in schema.")
         .atMost(30L, TimeUnit.SECONDS)
         .until(

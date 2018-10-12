@@ -100,6 +100,14 @@
             <classifier>features</classifier>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>ddf.features</groupId>
+            <artifactId>security</artifactId>
+            <version>${ddf.version}</version>
+            <type>xml</type>
+            <classifier>features</classifier>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

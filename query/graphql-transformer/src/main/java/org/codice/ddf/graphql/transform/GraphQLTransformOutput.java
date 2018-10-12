@@ -211,10 +211,11 @@ public class GraphQLTransformOutput {
   // Omit the referenceTypeProvider intentionally since all the types should already be defined by
   // the other providers
   public List<GraphQLTypesProvider> getTypeProviders() {
-    return ImmutableList.of(
-        inputTransformer.getInputTypeProvider(),
-        transformScalar.getScalarTypesProvider(),
-        transformEnum.getEnumTypeProvider(),
-        outputTypeProvider);
+    return ImmutableList.of(inputTransformer.getInputTypeProvider(),
+            transformScalar.getScalarTypesProvider(),
+            transformEnum.getEnumTypeProvider(),
+            outputTypeProvider,
+            referenceTypeProvider,
+            transformScalar.getScalarTypesProvider());
   }
 }

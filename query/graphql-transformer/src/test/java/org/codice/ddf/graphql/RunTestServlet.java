@@ -43,7 +43,7 @@ public class RunTestServlet {
   public static class TestServlet extends OsgiGraphQLHttpServlet {
     public TestServlet() {
       super();
-      bindProvider(GraphQLTransformCommons.createGraphQLProvider(new TestFieldProvider()));
+      bindProvider(GraphQLTransformCommons.createGraphQLProvider(Arrays.asList(new TestFieldProvider())));
     }
   }
 }

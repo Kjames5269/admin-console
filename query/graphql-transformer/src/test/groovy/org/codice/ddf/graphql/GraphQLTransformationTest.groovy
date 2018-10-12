@@ -106,7 +106,7 @@ class GraphQLTransformationTest extends Specification {
 
     def setup() {
         servlet = new OsgiGraphQLHttpServlet()
-        servlet.bindProvider(GraphQLTransformCommons.createGraphQLProvider(new TestFieldProvider()))
+        servlet.bindProvider(GraphQLTransformCommons.createGraphQLProvider([new TestFieldProvider()]))
         servlet.setErrorHandler(new GraphQLErrorHandler())
         servlet.setExecutionStrategyProvider(new ExecutionStrategyProviderImpl())
 

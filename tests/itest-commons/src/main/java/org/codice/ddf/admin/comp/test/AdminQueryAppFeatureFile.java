@@ -43,6 +43,8 @@ public class AdminQueryAppFeatureFile {
 
 
 
+  public static final String ADMIN_QUERY_ALL = "admin-query-all";
+
   public static final String ADMIN_QUERY_STS = "admin-query-sts";
 
   public static final String ADMIN_QUERY_WCPM = "admin-query-wcpm";
@@ -81,6 +83,6 @@ public class AdminQueryAppFeatureFile {
   }
 
   public static Feature adminQueryAll() {
-    return new FeatureImpl(ADMIN_QUERY_FEATURE.getFeatureFileUrl(), ADMIN_QUERY_WCPM);
+    return new FeatureImpl(ADMIN_QUERY_FEATURE.getFeatureFileUrl(), ADMIN_QUERY_ALL);
   }
 }

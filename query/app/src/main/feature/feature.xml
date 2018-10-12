@@ -66,6 +66,7 @@
 
         <feature>admin-query-api</feature>
         <feature>admin-configurator</feature>
+        <bundle>mvn:org.apache.commons/commons-lang3/${commons-lang3.version}</bundle>
         <bundle>mvn:org.codice.ddf.admin.query/admin-query-sources-impl/${project.version}</bundle>
     </feature>
 
@@ -86,6 +87,7 @@
 
     <feature name="graphql-java-servlet" install="auto" version="${project.version}"
              description="Required dependencies for graphql-java-servlet bundle">
+        <feature prerequisite="true">wrap</feature>
         <feature>graphql-java</feature>
         <feature>pax-http-whiteboard</feature>
         <bundle>mvn:com.fasterxml.jackson.core/jackson-core/2.8.11</bundle>
@@ -111,5 +113,21 @@
         <feature>admin-query-embeddedldap</feature>
         <feature>admin-query-sources</feature>
         <feature>admin-query-graphql-transformer</feature>
+        <feature>admin-query-ui</feature>
+    </feature>
+
+    <feature name="security-services-app" version="${project.version}"
+             description="The Security Application provides Authentication, Authorization, and Auditing services.\nThey comprise both a framework that developers and integrators can extend and also a reference implementation that can be used which meets security requirements.::Security">
+        <!--Added prerequisite to make sure the security filter injector is running before any other contexts get registered-->
+        <feature prerequisite="true">web-container</feature>
+        <feature>security-core</feature>
+        <feature>security-policy-context</feature>
+        <feature>security-web-sso-defaults</feature>
+        <feature>security-guest</feature>
+        <feature>security-sts-certificateclaimshandler</feature>
+        <feature>security-idp</feature>
+        <feature>security-certificate</feature>
+        <feature>security-rest-authentication</feature>
+        <feature>security-command-listener</feature>
     </feature>
 </features>

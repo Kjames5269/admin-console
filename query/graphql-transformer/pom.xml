@@ -9,6 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>graphql-transformer</artifactId>
+    <name>DDF :: Admin Console :: Query :: GraphQL Transformer</name>
+    <description>Utilities and services to transform field providers into a graphql schema</description>
     <packaging>bundle</packaging>
 
     <dependencies>
@@ -80,6 +82,11 @@
             <artifactId>jetty-servlet</artifactId>
             <version>9.3.14.v20161028</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
         </dependency>
 
         <!--end test dependencies-->

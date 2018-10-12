@@ -38,10 +38,6 @@ public class GraphQLTransformCommons {
     transformOutput = new GraphQLTransformOutput();
   }
 
-  public static GraphQLProvider createGraphQLProvider(FieldProvider providers) {
-    return new GraphQLTransformCommons().fieldProvidersToGraphQlProvider(ImmutableList.of(providers));
-  }
-
   public static GraphQLProvider createGraphQLProvider(List<FieldProvider> providers) {
     return new GraphQLTransformCommons().fieldProvidersToGraphQlProvider(providers);
   }
@@ -57,7 +53,7 @@ public class GraphQLTransformCommons {
     List<GraphQLFieldDefinition> mutations = providers.stream().map(this::fieldProviderToMutations).flatMap(List::stream).collect(
             Collectors.toList());
 
-    return new GraphQLProviderImpl(queries, mutations);
+    return new GraphQLProviderImpl(queries, mutations, transformOutput.getTypeProviders());
   }
 
   private List<GraphQLFieldDefinition> fieldProviderToMutations(FieldProvider provider) {

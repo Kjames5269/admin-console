@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.IOUtils;
 import org.boon.Boon;
-import org.codice.ddf.itests.common.WaitCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
