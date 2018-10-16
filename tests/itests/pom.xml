@@ -29,7 +29,6 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
-        <!--Feature file dependencies-->
         <dependency>
             <groupId>ddf.platform</groupId>
             <artifactId>sync-installer-api</artifactId>
@@ -66,6 +65,19 @@
         <!--ddf dependencies end-->
 
         <dependency>
+            <groupId>org.codice.ddf.admin.query</groupId>
+            <artifactId>admin-graphql</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codice.ddf.admin.query</groupId>
+            <artifactId>admin-query-security-common</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>ddf.thirdparty</groupId>
             <artifactId>rest-assured</artifactId>
             <version>${ddf.version}</version>
@@ -79,17 +91,14 @@
             <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.codice.ddf.admin.query</groupId>
-            <artifactId>admin-graphql</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.codice.ddf.admin.query</groupId>
-            <artifactId>admin-query-security-common</artifactId>
-            <version>${project.version}</version>
+            <groupId>ddf.features</groupId>
+            <artifactId>install-profiles</artifactId>
+            <version>${ddf.version}</version>
+            <classifier>features</classifier>
+            <type>xml</type>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -104,8 +113,8 @@
             <groupId>ddf.features</groupId>
             <artifactId>security</artifactId>
             <version>${ddf.version}</version>
-            <type>xml</type>
             <classifier>features</classifier>
+            <type>xml</type>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -142,6 +151,25 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>3.0.1</version>
                 <executions>
+                    <execution>
+                        <id>copy-security-policy</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.codice.ddf.admin.query</groupId>
+                                    <artifactId>admin-query-security-policy</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>policy</type>
+                                    <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                                    <destFileName>admin-query-security.policy</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>unpack-ddf-common</id>
                         <phase>pre-integration-test</phase>
@@ -222,7 +250,6 @@
                         TODO - Re-enable and fix component tests once feature file refactoring has been completed.
                         see: https://github.com/codice/ddf/pull/2896
                     -->
-                    <!--<skipITs>true</skipITs>-->
                     <argLine>-Djava.awt.headless=true -noverify</argLine>
                 </configuration>
                 <executions>

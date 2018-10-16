@@ -60,21 +60,11 @@
 
     <feature name="admin-query-sources" install="manual" version="${project.version}"
              description="DDF :: Admin Console :: Query :: Sources">
-        <!--caetalog-core-api is not stable, action-core-impl is an dependency it needs-->
-        <feature>action-core-impl</feature>
         <feature>catalog-core-api</feature>
-
         <feature>admin-query-api</feature>
         <feature>admin-configurator</feature>
         <bundle>mvn:org.apache.commons/commons-lang3/${commons-lang3.version}</bundle>
         <bundle>mvn:org.codice.ddf.admin.query/admin-query-sources-impl/${project.version}</bundle>
-    </feature>
-
-    <feature name="admin-query-graphql-transformer" install="manual" version="${project.version}" description="Transformer responsible for transforming the admin query API services to graphql services usable by the graphql servlet.">
-        <feature>graphql-java-servlet</feature>
-        <feature>admin-query-api</feature>
-        <bundle>mvn:io.fastjson/boon/${boon.version}</bundle>
-        <bundle>mvn:org.codice.ddf.admin.query/graphql-transformer/${project.version}</bundle>
     </feature>
 
     <feature name="graphql-java" install="manual" version="${project.version}"
@@ -85,16 +75,18 @@
         <bundle>mvn:org.reactivestreams/reactive-streams/1.0.2</bundle>
     </feature>
 
-    <feature name="graphql-java-servlet" install="auto" version="${project.version}"
-             description="Required dependencies for graphql-java-servlet bundle">
+    <feature name="graphql-transformer-servlet" install="auto" version="${project.version}">
         <feature prerequisite="true">wrap</feature>
         <feature>graphql-java</feature>
         <feature>pax-http-whiteboard</feature>
+        <feature>admin-query-api</feature>
         <bundle>mvn:com.fasterxml.jackson.core/jackson-core/2.8.11</bundle>
         <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/2.8.11</bundle>
         <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/2.8.11</bundle>
         <bundle>mvn:com.fasterxml.jackson.datatype/jackson-datatype-jdk8/2.8.11</bundle>
-        <bundle>wrap:mvn:com.graphql-java/graphql-java-servlet/${graphql-java-servlet.version}$overwrite=merge&amp;Import-Package=*,javax.servlet*;version="[3.1.0,3.2.0)"</bundle>
+
+        <bundle>mvn:io.fastjson/boon/${boon.version}</bundle>
+        <bundle>mvn:org.codice.ddf.admin.query/admin-graphql/${project.version}</bundle>
     </feature>
 
     <feature name="admin-query-ui" install="manual" version="${project.version}"
@@ -107,27 +99,12 @@
 
     <feature name="admin-query-all" install="manual" version="${project.version}"
              description="DDF Admin Query All includes a source setup wizard, LDAP setup wizard and a GUI for the web context policy manager. Go to /admin/hub to access the UI.">
+        <feature>graphql-transformer-servlet</feature>
         <feature>admin-query-sts</feature>
         <feature>admin-query-wcpm</feature>
         <feature>admin-query-ldap</feature>
         <feature>admin-query-embeddedldap</feature>
         <feature>admin-query-sources</feature>
-        <feature>admin-query-graphql-transformer</feature>
         <feature>admin-query-ui</feature>
-    </feature>
-
-    <feature name="security-services-app" version="${project.version}"
-             description="The Security Application provides Authentication, Authorization, and Auditing services.\nThey comprise both a framework that developers and integrators can extend and also a reference implementation that can be used which meets security requirements.::Security">
-        <!--Added prerequisite to make sure the security filter injector is running before any other contexts get registered-->
-        <feature prerequisite="true">web-container</feature>
-        <feature>security-core</feature>
-        <feature>security-policy-context</feature>
-        <feature>security-web-sso-defaults</feature>
-        <feature>security-guest</feature>
-        <feature>security-sts-certificateclaimshandler</feature>
-        <feature>security-idp</feature>
-        <feature>security-certificate</feature>
-        <feature>security-rest-authentication</feature>
-        <feature>security-command-listener</feature>
     </feature>
 </features>

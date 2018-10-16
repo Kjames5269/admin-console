@@ -23,11 +23,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.codice.ddf.admin.common.fields.common.PidField;
-import org.codice.ddf.admin.comp.graphql.GraphQlHelper;
+import org.codice.ddf.admin.graphql.test.GraphQlHelper;
 import org.codice.ddf.admin.sources.fields.type.CswSourceConfigurationField;
 import org.codice.ddf.admin.sources.fields.type.OpenSearchSourceConfigurationField;
 import org.codice.ddf.admin.sources.fields.type.WfsSourceConfigurationField;
-import org.codice.ddf.itests.common.WaitCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

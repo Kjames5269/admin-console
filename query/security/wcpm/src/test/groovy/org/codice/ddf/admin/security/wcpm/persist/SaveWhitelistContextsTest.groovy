@@ -16,7 +16,6 @@ package org.codice.ddf.admin.security.wcpm.persist
 import org.codice.ddf.internal.admin.configurator.actions.ConfiguratorSuite
 import org.codice.ddf.admin.api.fields.FunctionField
 import org.codice.ddf.admin.api.report.Report
-import org.codice.ddf.admin.common.fields.base.BaseFunctionField
 import org.codice.ddf.admin.common.report.message.DefaultMessages
 import org.codice.ddf.admin.configurator.Configurator
 import org.codice.ddf.admin.configurator.ConfiguratorFactory

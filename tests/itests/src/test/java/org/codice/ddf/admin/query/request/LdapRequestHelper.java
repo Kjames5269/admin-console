@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.boon.Boon;
-import org.codice.ddf.admin.comp.graphql.GraphQlHelper;
+import org.codice.ddf.admin.graphql.test.GraphQlHelper;
 import org.codice.ddf.admin.ldap.fields.config.LdapConfigurationField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

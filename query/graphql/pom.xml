@@ -25,6 +25,7 @@
     <packaging>bundle</packaging>
 
     <dependencies>
+        <!--TODO - clean up these dependencies-->
         <dependency>
             <groupId>com.graphql-java</groupId>
             <artifactId>graphql-java</artifactId>
@@ -114,9 +115,11 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                        <Import-Package>
-                            *
-                        </Import-Package>
+                        <Embed-Dependency>
+                            graphql-java-servlet
+                        </Embed-Dependency>
+                        <!--graphql-servlet uses SCR, an alternative to blueprint. The line below overrides the service declarations-->
+                        <_dsannotations />
                     </instructions>
                 </configuration>
             </plugin>

@@ -25,9 +25,6 @@ import org.codice.ddf.admin.common.services.ServiceCommons;
 import org.codice.ddf.admin.security.common.fields.wcpm.ContextPolicyBin;
 import org.codice.ddf.internal.admin.configurator.actions.ConfiguratorSuite;
 import org.codice.ddf.internal.admin.configurator.actions.ServiceReader;
-
-// TODO: tbatie - 10/3/18 - These context policy dependencies are not good, ldap now has a
-// dependency on them
 import org.codice.ddf.security.policy.context.ContextPolicy;
 import org.codice.ddf.security.policy.context.ContextPolicyManager;
 import org.codice.ddf.security.policy.context.attributes.ContextAttributeMapping;

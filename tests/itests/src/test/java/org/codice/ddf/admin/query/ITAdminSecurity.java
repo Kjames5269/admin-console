@@ -17,7 +17,6 @@ import static org.codice.ddf.test.common.options.DebugOptions.defaultDebuggingOp
 import static org.codice.ddf.test.common.options.DistributionOptions.kernelDistributionOption;
 import static org.codice.ddf.test.common.options.FeatureOptions.addBootFeature;
 import static org.codice.ddf.test.common.options.LoggingOptions.defaultLogging;
-import static org.codice.ddf.test.common.options.LoggingOptions.logLevelOption;
 import static org.codice.ddf.test.common.options.PortOptions.defaultPortsOptions;
 import static org.codice.ddf.test.common.options.PortOptions.getHttpsPort;
 import static org.codice.ddf.test.common.options.TestResourcesOptions.getTestResource;
@@ -31,6 +30,7 @@ import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfigurationFilePut;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.replaceConfigurationFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ import javax.inject.Inject;
 
 import org.codice.ddf.admin.api.fields.EnumValue;
 import org.codice.ddf.admin.common.fields.common.CredentialsField;
-import org.codice.ddf.admin.comp.test.AdminQueryAppFeatureFile;
+import org.codice.ddf.admin.graphql.test.AdminQueryAppFeatureFile;
 import org.codice.ddf.admin.ldap.fields.config.LdapConfigurationField;
 import org.codice.ddf.admin.ldap.fields.config.LdapDirectorySettingsField;
 import org.codice.ddf.admin.ldap.fields.connection.LdapBindMethod.SimpleEnumValue;
@@ -84,10 +84,25 @@ public class ITAdminSecurity {
           .classifier("feature")
           .version(DependencyVersionResolver.resolver()));
 
-  public static final String POLICY_MNGR_CONFIG =
+  public static final FeatureRepo APPS_FEATURE = new FeatureRepoImpl(maven()
+          .groupId("ddf.features")
+          .artifactId("apps")
+          .type("xml")
+          .classifier("features")
+          .version(DependencyVersionResolver.resolver()));
+
+  public static final String POLICY_MNGR_CONFIG_PATH =
           "/org.codice.ddf.security.policy.context.impl.PolicyManager.cfg";
 
-  public static final String GRAPHQL_SERVLET_CONFIG = "/graphql.servlet.OsgiGraphQLHttpServlet.cfg";
+  public static final File POLICY_MNGR_CONFIG_FILE = Paths.get(getTestResource(
+          POLICY_MNGR_CONFIG_PATH))
+          .toFile();
+
+  public static final String ADMIN_QUERY_SECURITY_POLICY_PATH = "/admin-query-security.policy";
+
+  public static final File ADMIN_QUERY_SECURITY_POLICY_FILE = Paths.get(getTestResource(
+          ADMIN_QUERY_SECURITY_POLICY_PATH))
+          .toFile();
 
   public static final String GRAPHQL_ENDPOINT =
           "https://localhost:" + getHttpsPort() + "/admin/hub/graphql";
@@ -133,19 +148,22 @@ public class ITAdminSecurity {
             defaultPortsOptions(),
             defaultLogging(),
             includeTestResources(),
-            logLevelOption("org.codice.ddf.admin.comp.graphql", "DEBUG"),
-            logLevelOption("org.codice.ddf.graphql", "TRACE"),
-            replaceConfigurationFile("/etc/" + POLICY_MNGR_CONFIG, Paths.get(getTestResource(POLICY_MNGR_CONFIG)).toFile()),
-            replaceConfigurationFile("/etc/" + GRAPHQL_SERVLET_CONFIG, Paths.get(getTestResource(GRAPHQL_SERVLET_CONFIG)).toFile()),
+//            logLevelOption("org.codice.ddf.admin.comp.graphql", "DEBUG"),
+//            logLevelOption("org.codice.ddf.graphql", "TRACE"),
+            replaceConfigurationFile("/etc/" + POLICY_MNGR_CONFIG_PATH, POLICY_MNGR_CONFIG_FILE),
+            replaceConfigurationFile("/security" + ADMIN_QUERY_SECURITY_POLICY_PATH, ADMIN_QUERY_SECURITY_POLICY_FILE),
+
+            // TODO: tbatie - 10/16/18 - SHould move to some feature
             mavenBundle().groupId("org.codice.ddf.admin.query")
                     .artifactId("itest-commons")
                     .version(DependencyVersionResolver.resolver()),
-            addBootFeature(
-                    new FeatureImpl(AdminQueryAppFeatureFile.featureRepo().getFeatureFileUrl(), "security-services-app"),
+
+            // TODO: tbatie - 10/16/18 - Start bare minimum of these features
+            addBootFeature(new FeatureImpl(APPS_FEATURE.getFeatureFileUrl(),
+                            "security-services-app"),
                     TestUtilitiesFeatures.testCommon(),
                     TestUtilitiesFeatures.awaitility(),
-                    new FeatureImpl(REST_ASSURED_FEATURE.getFeatureFileUrl
-                            (), "rest-assured"),
+                    new FeatureImpl(REST_ASSURED_FEATURE.getFeatureFileUrl(), "rest-assured"),
                     AdminQueryAppFeatureFile.adminQueryAll()));
   }
 
