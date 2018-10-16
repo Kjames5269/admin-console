@@ -13,14 +13,16 @@
  */
 package org.codice.ddf.graphql.servlet;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.RemovalCause;
+import com.google.common.cache.RemovalNotification;
 import graphql.servlet.GraphQLProvider;
 import graphql.servlet.OsgiGraphQLHttpServlet;
-
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
 import org.codice.ddf.admin.api.Events;
 import org.codice.ddf.admin.api.FieldProvider;
 import org.codice.ddf.graphql.transform.GraphQLTransformCommons;
@@ -28,11 +30,6 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.RemovalCause;
-import com.google.common.cache.RemovalNotification;
 
 public class GraphQLTransformerServlet extends OsgiGraphQLHttpServlet implements EventHandler {
 
@@ -104,7 +101,7 @@ public class GraphQLTransformerServlet extends OsgiGraphQLHttpServlet implements
   // invalidation implementation
   private synchronized void refreshSchema() {
     LOGGER.trace("Refreshing GraphQL schema.");
-    if(graphQLProvider != null) {
+    if (graphQLProvider != null) {
       unbindProvider(graphQLProvider);
     }
     graphQLProvider = GraphQLTransformCommons.createGraphQLProvider(fieldProviders);

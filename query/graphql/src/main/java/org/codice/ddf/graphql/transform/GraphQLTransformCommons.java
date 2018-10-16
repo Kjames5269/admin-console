@@ -13,20 +13,18 @@
  */
 package org.codice.ddf.graphql.transform;
 
+import graphql.schema.GraphQLEnumType;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLList;
+import graphql.servlet.GraphQLProvider;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-
 import org.apache.commons.lang.StringUtils;
 import org.codice.ddf.admin.api.FieldProvider;
 import org.codice.ddf.admin.api.fields.FunctionField;
-
-import graphql.schema.GraphQLEnumType;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLList;
-import graphql.servlet.GraphQLProvider;
 
 public class GraphQLTransformCommons {
 
@@ -41,15 +39,23 @@ public class GraphQLTransformCommons {
   }
 
   public GraphQLProvider fieldProvidersToGraphQlProvider(List<FieldProvider> providers) {
-    List<GraphQLFieldDefinition> queries = providers.stream().map(this::fieldProviderToQueries).flatMap(List::stream).collect(
-            Collectors.toList());
+    List<GraphQLFieldDefinition> queries =
+        providers
+            .stream()
+            .map(this::fieldProviderToQueries)
+            .flatMap(List::stream)
+            .collect(Collectors.toList());
     GraphQLFieldDefinition errorDefinitions = getErrorCodesQueryProvider(providers);
-    if(errorDefinitions != null) {
+    if (errorDefinitions != null) {
       queries.add(getErrorCodesQueryProvider(providers));
     }
 
-    List<GraphQLFieldDefinition> mutations = providers.stream().map(this::fieldProviderToMutations).flatMap(List::stream).collect(
-            Collectors.toList());
+    List<GraphQLFieldDefinition> mutations =
+        providers
+            .stream()
+            .map(this::fieldProviderToMutations)
+            .flatMap(List::stream)
+            .collect(Collectors.toList());
 
     return new GraphQLProviderImpl(queries, mutations, transformOutput.getTypeProviders());
   }
@@ -88,11 +94,11 @@ public class GraphQLTransformCommons {
     GraphQLEnumType errorCodeEnumType = enumTypeBuilder.build();
 
     return GraphQLFieldDefinition.newFieldDefinition()
-            .name("errorCodes")
-            .description("Returns all the possible error codes from the graphQL schema.")
-            .type(GraphQLList.list(errorCodeEnumType))
-            .dataFetcher(dataFetchingEnvironment -> errorCodes)
-            .build();
+        .name("errorCodes")
+        .description("Returns all the possible error codes from the graphQL schema.")
+        .type(GraphQLList.list(errorCodeEnumType))
+        .dataFetcher(dataFetchingEnvironment -> errorCodes)
+        .build();
   }
 
   static String capitalize(String str) {

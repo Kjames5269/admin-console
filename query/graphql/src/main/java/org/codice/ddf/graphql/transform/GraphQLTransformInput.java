@@ -13,16 +13,6 @@
  */
 package org.codice.ddf.graphql.transform;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.codice.ddf.admin.api.Field;
-import org.codice.ddf.admin.api.fields.EnumField;
-import org.codice.ddf.admin.api.fields.ListField;
-import org.codice.ddf.admin.api.fields.ObjectField;
-import org.codice.ddf.admin.api.fields.ScalarField;
-
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLInputObjectField;
 import graphql.schema.GraphQLInputObjectType;
@@ -30,6 +20,14 @@ import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLNonNull;
 import graphql.servlet.GraphQLTypesProvider;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.codice.ddf.admin.api.Field;
+import org.codice.ddf.admin.api.fields.EnumField;
+import org.codice.ddf.admin.api.fields.ListField;
+import org.codice.ddf.admin.api.fields.ObjectField;
+import org.codice.ddf.admin.api.fields.ScalarField;
 
 public class GraphQLTransformInput {
 

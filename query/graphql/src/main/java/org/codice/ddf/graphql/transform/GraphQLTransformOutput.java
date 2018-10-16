@@ -13,12 +13,20 @@
  */
 package org.codice.ddf.graphql.transform;
 
+import com.google.common.collect.ImmutableList;
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLTypeReference;
+import graphql.servlet.GraphQLTypesProvider;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import org.codice.ddf.admin.api.Field;
 import org.codice.ddf.admin.api.FieldProvider;
 import org.codice.ddf.admin.api.fields.EnumField;
@@ -28,17 +36,6 @@ import org.codice.ddf.admin.api.fields.ObjectField;
 import org.codice.ddf.admin.api.fields.ScalarField;
 import org.codice.ddf.admin.api.report.FunctionReport;
 import org.codice.ddf.graphql.FunctionDataFetcherException;
-
-import com.google.common.collect.ImmutableList;
-
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLArgument;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLTypeReference;
-import graphql.servlet.GraphQLTypesProvider;
 
 public class GraphQLTransformOutput {
 
@@ -214,11 +211,12 @@ public class GraphQLTransformOutput {
   // Omit the referenceTypeProvider intentionally since all the types should already be defined by
   // the other providers
   public List<GraphQLTypesProvider> getTypeProviders() {
-    return ImmutableList.of(inputTransformer.getInputTypeProvider(),
-            transformScalar.getScalarTypesProvider(),
-            transformEnum.getEnumTypeProvider(),
-            outputTypeProvider,
-            referenceTypeProvider,
-            transformScalar.getScalarTypesProvider());
+    return ImmutableList.of(
+        inputTransformer.getInputTypeProvider(),
+        transformScalar.getScalarTypesProvider(),
+        transformEnum.getEnumTypeProvider(),
+        outputTypeProvider,
+        referenceTypeProvider,
+        transformScalar.getScalarTypesProvider());
   }
 }

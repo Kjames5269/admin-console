@@ -13,12 +13,11 @@
  */
 package org.codice.ddf.graphql;
 
+import com.google.common.collect.ImmutableList;
 import org.codice.ddf.admin.common.fields.test.TestFieldProvider;
 import org.codice.ddf.graphql.servlet.GraphQLTransformerServlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-
-import com.google.common.collect.ImmutableList;
 
 /**
  * This class will bind the field provider to the graphql servlet and run a server to host the

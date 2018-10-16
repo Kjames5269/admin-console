@@ -38,8 +38,8 @@ import org.codice.ddf.admin.security.common.SecurityMessages;
 import org.codice.ddf.admin.security.common.SecurityValidation;
 import org.codice.ddf.admin.security.common.fields.wcpm.ClaimsMapEntry;
 import org.codice.ddf.admin.security.common.fields.wcpm.ContextPolicyBin;
-import org.codice.ddf.admin.security.wcpm.PolicyManagerServiceProperties;
 import org.codice.ddf.admin.security.common.services.StsServiceProperties;
+import org.codice.ddf.admin.security.wcpm.PolicyManagerServiceProperties;
 import org.codice.ddf.internal.admin.configurator.actions.ConfiguratorSuite;
 
 public class SaveContextPolices extends BaseFunctionField<ContextPolicyBin.ListImpl> {

@@ -31,16 +31,13 @@ import static org.hamcrest.Matchers.empty;
 import static org.ops4j.pax.exam.CoreOptions.maven;
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.editConfigurationFilePut;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.replaceConfigurationFile;
 
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
-
 import org.apache.commons.lang3.StringUtils;
 import org.codice.ddf.admin.common.fields.common.PidField;
 import org.codice.ddf.admin.graphql.test.AdminQueryAppFeatureFile;
@@ -71,70 +68,75 @@ import org.ops4j.pax.exam.spi.reactors.PerClass;
 @ExamReactorStrategy(PerClass.class)
 public class ITAdminSources {
 
-  public static final FeatureRepo INSTALL_PROFILES_FEATURE = new FeatureRepoImpl(maven().groupId("ddf.features")
-          .artifactId("install-profiles")
-          .type("xml")
-          .classifier("features")
-          .version(DependencyVersionResolver.resolver()));
+  public static final FeatureRepo INSTALL_PROFILES_FEATURE =
+      new FeatureRepoImpl(
+          maven()
+              .groupId("ddf.features")
+              .artifactId("install-profiles")
+              .type("xml")
+              .classifier("features")
+              .version(DependencyVersionResolver.resolver()));
 
   // TODO: tbatie - 10/3/18 - Move this to the test utilities feature in ddf
-  public static final FeatureRepo REST_ASSURED_FEATURE = new FeatureRepoImpl(maven().groupId(
-          "ddf.thirdparty")
-          .artifactId("rest-assured")
-          .type("xml")
-          .classifier("feature")
-          .version(DependencyVersionResolver.resolver()));
+  public static final FeatureRepo REST_ASSURED_FEATURE =
+      new FeatureRepoImpl(
+          maven()
+              .groupId("ddf.thirdparty")
+              .artifactId("rest-assured")
+              .type("xml")
+              .classifier("feature")
+              .version(DependencyVersionResolver.resolver()));
 
   public static final String GRAPHQL_ENDPOINT =
-          "https://localhost:" + getHttpsPort() + "/admin/hub/graphql";
+      "https://localhost:" + getHttpsPort() + "/admin/hub/graphql";
 
   public static final String POLICY_MNGR_CONFIG_PATH =
-          "/org.codice.ddf.security.policy.context.impl.PolicyManager.cfg";
+      "/org.codice.ddf.security.policy.context.impl.PolicyManager.cfg";
 
-  public static final File POLICY_MNGR_CONFIG_FILE = Paths.get(getTestResource(
-          POLICY_MNGR_CONFIG_PATH))
-          .toFile();
+  public static final File POLICY_MNGR_CONFIG_FILE =
+      Paths.get(getTestResource(POLICY_MNGR_CONFIG_PATH)).toFile();
 
   public static final String PID = PidField.DEFAULT_FIELD_NAME;
 
   public static final String WFS_NAME = WfsSourceConfigurationField.DEFAULT_FIELD_NAME;
 
   public static final String OPEN_SEARCH_NAME =
-          OpenSearchSourceConfigurationField.DEFAULT_FIELD_NAME;
+      OpenSearchSourceConfigurationField.DEFAULT_FIELD_NAME;
 
   public static final String CSW_NAME = CswSourceConfigurationField.DEFAULT_FIELD_NAME;
 
-  private static final SourcesRequestHelper SOURCES_REQUEST_HELPER = new SourcesRequestHelper(
-          GRAPHQL_ENDPOINT);
+  private static final SourcesRequestHelper SOURCES_REQUEST_HELPER =
+      new SourcesRequestHelper(GRAPHQL_ENDPOINT);
 
   public static final String TEST_SOURCE_NAME = "testSourceName";
 
   public static final String TEST_USERNAME = "testUsername";
 
-  @Inject
-  private SynchronizedInstaller syncInstaller;
+  @Inject private SynchronizedInstaller syncInstaller;
 
   @Configuration
   public static Option[] examConfiguration() {
-    return options(kernelDistributionOption(),
-            defaultVmOptions(),
-            defaultDebuggingOptions(),
-            defaultPortsOptions(),
-            defaultLogging(),
-            includeTestResources(),
-            // Useful logging options
-            // logLevelOption("org.codice.ddf.admin.comp.graphql", "DEBUG"),
-            // logLevelOption("org.codice.ddf.graphql", "TRACE"),
-            replaceConfigurationFile("/etc/" + POLICY_MNGR_CONFIG_PATH, POLICY_MNGR_CONFIG_FILE),
-
-            mavenBundle().groupId("org.codice.ddf.admin.query")
-                    .artifactId("itest-commons")
-                    .version(DependencyVersionResolver.resolver()),
-            addBootFeature(new FeatureImpl(INSTALL_PROFILES_FEATURE.getFeatureFileUrl(), "profile-standard"),
-                    TestUtilitiesFeatures.testCommon(),
-                    TestUtilitiesFeatures.awaitility(),
-                    new FeatureImpl(REST_ASSURED_FEATURE.getFeatureFileUrl(), "rest-assured"),
-                    AdminQueryAppFeatureFile.adminQueryAll()));
+    return options(
+        kernelDistributionOption(),
+        defaultVmOptions(),
+        defaultDebuggingOptions(),
+        defaultPortsOptions(),
+        defaultLogging(),
+        includeTestResources(),
+        // Useful logging options
+        // logLevelOption("org.codice.ddf.admin.comp.graphql", "DEBUG"),
+        // logLevelOption("org.codice.ddf.graphql", "TRACE"),
+        replaceConfigurationFile("/etc/" + POLICY_MNGR_CONFIG_PATH, POLICY_MNGR_CONFIG_FILE),
+        mavenBundle()
+            .groupId("org.codice.ddf.admin.query")
+            .artifactId("itest-commons")
+            .version(DependencyVersionResolver.resolver()),
+        addBootFeature(
+            new FeatureImpl(INSTALL_PROFILES_FEATURE.getFeatureFileUrl(), "profile-standard"),
+            TestUtilitiesFeatures.testCommon(),
+            TestUtilitiesFeatures.awaitility(),
+            new FeatureImpl(REST_ASSURED_FEATURE.getFeatureFileUrl(), "rest-assured"),
+            AdminQueryAppFeatureFile.adminQueryAll()));
   }
 
   @Before
@@ -146,33 +148,30 @@ public class ITAdminSources {
   @Test
   public void testWfs20() {
     // create wfs source
-    Map<String, Object> configToSave = createWfsArgs(TEST_SOURCE_NAME,
-            null,
-            WfsVersion.Wfs2.ENUM_TITLE).getValue();
+    Map<String, Object> configToSave =
+        createWfsArgs(TEST_SOURCE_NAME, null, WfsVersion.Wfs2.ENUM_TITLE).getValue();
 
-    boolean createSuccess = SOURCES_REQUEST_HELPER.createSource(SourcesRequestHelper.SourceType.WFS,
-            configToSave);
+    boolean createSuccess =
+        SOURCES_REQUEST_HELPER.createSource(SourcesRequestHelper.SourceType.WFS, configToSave);
     assertThat("Error creating WFS source.", createSuccess, is(true));
 
     SOURCES_REQUEST_HELPER.waitForWfsSource(configToSave, true);
 
     // get created wfs source
     List<Map<String, Object>> wfsSources =
-            SOURCES_REQUEST_HELPER.getSources(SourcesRequestHelper.SourceType.WFS);
+        SOURCES_REQUEST_HELPER.getSources(SourcesRequestHelper.SourceType.WFS);
     assertThat(wfsSources, is(not(empty())));
 
-    Map<String, String> sourceProperties = (Map) wfsSources.get(0)
-            .get(WFS_NAME);
+    Map<String, String> sourceProperties = (Map) wfsSources.get(0).get(WFS_NAME);
     String pid = sourceProperties.get(PID);
     assertThat("Error getting WFS source.", StringUtils.isNotEmpty(pid));
 
     // update wfs source
-    Map<String, Object> updateArgs = createWfsArgs("updatedName",
-            pid,
-            WfsVersion.Wfs2.ENUM_TITLE).getValue();
+    Map<String, Object> updateArgs =
+        createWfsArgs("updatedName", pid, WfsVersion.Wfs2.ENUM_TITLE).getValue();
 
-    boolean updateSuccess = SOURCES_REQUEST_HELPER.updateSource(SourcesRequestHelper.SourceType.WFS,
-            updateArgs);
+    boolean updateSuccess =
+        SOURCES_REQUEST_HELPER.updateSource(SourcesRequestHelper.SourceType.WFS, updateArgs);
     assertThat("Error updating WFS source", updateSuccess, is(true));
 
     SOURCES_REQUEST_HELPER.waitForWfsSource(updateArgs, false);
@@ -181,43 +180,40 @@ public class ITAdminSources {
     wfsSources = SOURCES_REQUEST_HELPER.getSources(SourcesRequestHelper.SourceType.WFS);
     assertThat(wfsSources, is(not(empty())));
 
-    sourceProperties = (Map) wfsSources.get(0)
-            .get(WFS_NAME);
+    sourceProperties = (Map) wfsSources.get(0).get(WFS_NAME);
     String updatedName = sourceProperties.get(SourceConfigField.SOURCE_NAME_FIELD_NAME);
     assertEquals("Error updating WFS source.", "updatedName", updatedName);
 
     // delete wfs source
-    boolean deleteSuccess = SOURCES_REQUEST_HELPER.deleteSource(SourcesRequestHelper.SourceType.WFS,
-            pid);
+    boolean deleteSuccess =
+        SOURCES_REQUEST_HELPER.deleteSource(SourcesRequestHelper.SourceType.WFS, pid);
     assertThat("Error deleting WFS source.", deleteSuccess, is(true));
   }
 
   @Test
   public void testWfs10() {
     // create wfs source
-    Map<String, Object> configToSave = createWfsArgs(TEST_SOURCE_NAME,
-            null,
-            WfsVersion.Wfs1.ENUM_TITLE).getValue();
+    Map<String, Object> configToSave =
+        createWfsArgs(TEST_SOURCE_NAME, null, WfsVersion.Wfs1.ENUM_TITLE).getValue();
 
-    boolean createSuccess = SOURCES_REQUEST_HELPER.createSource(SourcesRequestHelper.SourceType.WFS,
-            configToSave);
+    boolean createSuccess =
+        SOURCES_REQUEST_HELPER.createSource(SourcesRequestHelper.SourceType.WFS, configToSave);
     assertThat("Error creating WFS source.", createSuccess, is(true));
 
     SOURCES_REQUEST_HELPER.waitForWfsSource(configToSave, true);
 
     // get created wfs source
     List<Map<String, Object>> wfsSources =
-            SOURCES_REQUEST_HELPER.getSources(SourcesRequestHelper.SourceType.WFS);
+        SOURCES_REQUEST_HELPER.getSources(SourcesRequestHelper.SourceType.WFS);
     assertThat(wfsSources, is(not(empty())));
 
-    Map<String, String> sourceProperties = (Map) wfsSources.get(0)
-            .get(WFS_NAME);
+    Map<String, String> sourceProperties = (Map) wfsSources.get(0).get(WFS_NAME);
     String pid = sourceProperties.get(PID);
     assertThat("Error getting WFS source.", StringUtils.isNotEmpty(pid));
 
     // delete wfs source
-    boolean deleteSuccess = SOURCES_REQUEST_HELPER.deleteSource(SourcesRequestHelper.SourceType.WFS,
-            pid);
+    boolean deleteSuccess =
+        SOURCES_REQUEST_HELPER.deleteSource(SourcesRequestHelper.SourceType.WFS, pid);
     assertThat("Error deleting WFS source.", deleteSuccess, is(true));
   }
 
@@ -227,74 +223,70 @@ public class ITAdminSources {
     Map<String, Object> configToSave = createOpenSearchArgs(TEST_SOURCE_NAME, null).getValue();
 
     boolean createSuccess =
-            SOURCES_REQUEST_HELPER.createSource(SourcesRequestHelper.SourceType.OPEN_SEARCH,
-                    configToSave);
+        SOURCES_REQUEST_HELPER.createSource(
+            SourcesRequestHelper.SourceType.OPEN_SEARCH, configToSave);
     assertThat("Error creating OpenSearch source.", createSuccess, is(true));
 
     SOURCES_REQUEST_HELPER.waitForOpenSearch(configToSave, true);
 
     // get created openSearch source
-    List<Map<String, Object>> openSearchSources = SOURCES_REQUEST_HELPER.getSources(
-            SourcesRequestHelper.SourceType.OPEN_SEARCH);
+    List<Map<String, Object>> openSearchSources =
+        SOURCES_REQUEST_HELPER.getSources(SourcesRequestHelper.SourceType.OPEN_SEARCH);
     assertThat(openSearchSources, is(not(empty())));
 
-    Map<String, String> sourceProperties = (Map) openSearchSources.get(0)
-            .get(OPEN_SEARCH_NAME);
+    Map<String, String> sourceProperties = (Map) openSearchSources.get(0).get(OPEN_SEARCH_NAME);
     String pid = sourceProperties.get(PID);
     assertThat("Error getting OpenSearch source.", StringUtils.isNotEmpty(pid));
 
     // update openSearch source
     Map<String, Object> updateArgs = createOpenSearchArgs("updatedName", pid).getValue();
     boolean updateSuccess =
-            SOURCES_REQUEST_HELPER.updateSource(SourcesRequestHelper.SourceType.OPEN_SEARCH,
-                    updateArgs);
+        SOURCES_REQUEST_HELPER.updateSource(
+            SourcesRequestHelper.SourceType.OPEN_SEARCH, updateArgs);
     assertThat("Error updating OpenSearch source", updateSuccess, is(true));
 
     SOURCES_REQUEST_HELPER.waitForOpenSearch(updateArgs, false);
 
     // get updated openSearch source
     openSearchSources =
-            SOURCES_REQUEST_HELPER.getSources(SourcesRequestHelper.SourceType.OPEN_SEARCH);
+        SOURCES_REQUEST_HELPER.getSources(SourcesRequestHelper.SourceType.OPEN_SEARCH);
     assertThat(openSearchSources, is(not(empty())));
 
-    sourceProperties = (Map) openSearchSources.get(0)
-            .get(OPEN_SEARCH_NAME);
+    sourceProperties = (Map) openSearchSources.get(0).get(OPEN_SEARCH_NAME);
     String updatedName = sourceProperties.get(SourceConfigField.SOURCE_NAME_FIELD_NAME);
     assertEquals("Error updating OpenSearch source.", "updatedName", updatedName);
 
     // delete openSearch source
     boolean deleteSuccess =
-            SOURCES_REQUEST_HELPER.deleteSource(SourcesRequestHelper.SourceType.OPEN_SEARCH, pid);
+        SOURCES_REQUEST_HELPER.deleteSource(SourcesRequestHelper.SourceType.OPEN_SEARCH, pid);
     assertThat("Error deleting OpenSearch source.", deleteSuccess, is(true));
   }
 
   @Test
   public void testCsw() {
     // create CSW source
-    Map<String, Object> cswConfigToSave = createCswArgs(TEST_SOURCE_NAME,
-            null,
-            MASKED_PASSWORD).getValue();
+    Map<String, Object> cswConfigToSave =
+        createCswArgs(TEST_SOURCE_NAME, null, MASKED_PASSWORD).getValue();
 
-    boolean createSuccess = SOURCES_REQUEST_HELPER.createSource(SourcesRequestHelper.SourceType.CSW,
-            cswConfigToSave);
+    boolean createSuccess =
+        SOURCES_REQUEST_HELPER.createSource(SourcesRequestHelper.SourceType.CSW, cswConfigToSave);
     assertThat("Error creating CSW source.", createSuccess, is(true));
 
     SOURCES_REQUEST_HELPER.waitForCswSource(cswConfigToSave, true);
 
     // get created CSW source
     List<Map<String, Object>> cswSources =
-            SOURCES_REQUEST_HELPER.getSources(SourcesRequestHelper.SourceType.CSW);
+        SOURCES_REQUEST_HELPER.getSources(SourcesRequestHelper.SourceType.CSW);
     assertThat(cswSources, is(not(empty())));
 
-    Map<String, String> sourceProperties = (Map) cswSources.get(0)
-            .get(CSW_NAME);
+    Map<String, String> sourceProperties = (Map) cswSources.get(0).get(CSW_NAME);
     String pid = sourceProperties.get(PID);
     assertThat("Error getting CSW source.", StringUtils.isNotEmpty(pid));
 
     // update CSW source
     Map<String, Object> updateArgs = createCswArgs("updatedName", pid, MASKED_PASSWORD).getValue();
-    boolean updateSuccess = SOURCES_REQUEST_HELPER.updateSource(SourcesRequestHelper.SourceType.CSW,
-            updateArgs);
+    boolean updateSuccess =
+        SOURCES_REQUEST_HELPER.updateSource(SourcesRequestHelper.SourceType.CSW, updateArgs);
     assertThat("Error updating CSW source", updateSuccess, is(true));
 
     SOURCES_REQUEST_HELPER.waitForCswSource(updateArgs, false);
@@ -303,26 +295,26 @@ public class ITAdminSources {
     cswSources = SOURCES_REQUEST_HELPER.getSources(SourcesRequestHelper.SourceType.CSW);
     assertThat(cswSources, is(not(empty())));
 
-    sourceProperties = (Map) cswSources.get(0)
-            .get(OPEN_SEARCH_NAME);
+    sourceProperties = (Map) cswSources.get(0).get(OPEN_SEARCH_NAME);
     String updatedName = sourceProperties.get(SourceConfigField.SOURCE_NAME_FIELD_NAME);
     assertEquals("Error updating CSW source.", "updatedName", updatedName);
 
     // delete CSW source
-    boolean deleteSuccess = SOURCES_REQUEST_HELPER.deleteSource(SourcesRequestHelper.SourceType.CSW,
-            pid);
+    boolean deleteSuccess =
+        SOURCES_REQUEST_HELPER.deleteSource(SourcesRequestHelper.SourceType.CSW, pid);
     assertThat("Error deleting CSW source.", deleteSuccess, is(true));
   }
 
-  public WfsSourceConfigurationField createWfsArgs(String sourceName, String pid,
-          String wfsVersion) {
+  public WfsSourceConfigurationField createWfsArgs(
+      String sourceName, String pid, String wfsVersion) {
     WfsSourceConfigurationField config = new WfsSourceConfigurationField();
-    config.wfsVersion(wfsVersion)
-            .endpointUrl("https://localhost:8993/geoserver/wfs")
-            .sourceName(sourceName)
-            .credentials()
-            .username(TEST_USERNAME)
-            .password(MASKED_PASSWORD);
+    config
+        .wfsVersion(wfsVersion)
+        .endpointUrl("https://localhost:8993/geoserver/wfs")
+        .sourceName(sourceName)
+        .credentials()
+        .username(TEST_USERNAME)
+        .password(MASKED_PASSWORD);
 
     if (org.apache.commons.lang.StringUtils.isNotEmpty(pid)) {
       config.pid(pid);
@@ -333,11 +325,12 @@ public class ITAdminSources {
 
   public OpenSearchSourceConfigurationField createOpenSearchArgs(String sourceName, String pid) {
     OpenSearchSourceConfigurationField config = new OpenSearchSourceConfigurationField();
-    config.endpointUrl("https://localhost:8993/services/csw")
-            .sourceName(sourceName)
-            .credentials()
-            .username(TEST_USERNAME)
-            .password(MASKED_PASSWORD);
+    config
+        .endpointUrl("https://localhost:8993/services/csw")
+        .sourceName(sourceName)
+        .credentials()
+        .username(TEST_USERNAME)
+        .password(MASKED_PASSWORD);
 
     if (org.apache.commons.lang.StringUtils.isNotEmpty(pid)) {
       config.pid(pid);
@@ -348,14 +341,15 @@ public class ITAdminSources {
 
   public CswSourceConfigurationField createCswArgs(String sourceName, String pid, String password) {
     CswSourceConfigurationField config = new CswSourceConfigurationField();
-    config.outputSchema("testOutputSchema")
-            .spatialOperator(CswSpatialOperator.NoFilter.ENUM_TITLE)
-            .cswProfile(CswProfile.DDFCswFederatedSource.CSW_FEDERATION_PROFILE_SOURCE)
-            .endpointUrl("https://localhost:8993/services/csw")
-            .sourceName(sourceName)
-            .credentials()
-            .username(TEST_USERNAME)
-            .password(password);
+    config
+        .outputSchema("testOutputSchema")
+        .spatialOperator(CswSpatialOperator.NoFilter.ENUM_TITLE)
+        .cswProfile(CswProfile.DDFCswFederatedSource.CSW_FEDERATION_PROFILE_SOURCE)
+        .endpointUrl("https://localhost:8993/services/csw")
+        .sourceName(sourceName)
+        .credentials()
+        .username(TEST_USERNAME)
+        .password(password);
 
     if (org.apache.commons.lang.StringUtils.isNotEmpty(pid)) {
       config.pid(pid);

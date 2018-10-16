@@ -46,8 +46,8 @@ public class SourcesRequestHelper {
     requestFactory =
         new GraphQlHelper(
             WcpmRequestHelper.class,
-                getTestResource(SOURCES_QUERY_RESOURCE_PATH),
-                getTestResource(SOURCES_MUTATION_RESOURCE_PATH),
+            getTestResource(SOURCES_QUERY_RESOURCE_PATH),
+            getTestResource(SOURCES_MUTATION_RESOURCE_PATH),
             graphQlEndpoint);
   }
 

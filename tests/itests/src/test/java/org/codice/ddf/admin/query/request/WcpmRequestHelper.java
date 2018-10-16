@@ -20,19 +20,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.fail;
 
+import com.jayway.restassured.response.ExtractableResponse;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
 import org.boon.Boon;
 import org.codice.ddf.admin.common.fields.common.ContextPath;
 import org.codice.ddf.admin.graphql.test.GraphQlHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.jayway.restassured.response.ExtractableResponse;
 
 public class WcpmRequestHelper {
 
@@ -52,8 +50,8 @@ public class WcpmRequestHelper {
     requestFactory =
         new GraphQlHelper(
             WcpmRequestHelper.class,
-                getTestResource(WCPM_QUERY_RESOURCE_PATH),
-                getTestResource(WCPM_MUTATION_RESOURCE_PATH),
+            getTestResource(WCPM_QUERY_RESOURCE_PATH),
+            getTestResource(WCPM_MUTATION_RESOURCE_PATH),
             graphQlEndpoint);
   }
 

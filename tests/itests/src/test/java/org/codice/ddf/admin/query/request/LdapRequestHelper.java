@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
 import org.boon.Boon;
 import org.codice.ddf.admin.graphql.test.GraphQlHelper;
 import org.codice.ddf.admin.ldap.fields.config.LdapConfigurationField;
@@ -45,8 +44,8 @@ public class LdapRequestHelper {
     requestFactory =
         new GraphQlHelper(
             LdapRequestHelper.class,
-                getTestResource(LDAP_QUERY_RESOURCE_PATH),
-                getTestResource(LDAP_MUTATION_RESOURCE_PATH),
+            getTestResource(LDAP_QUERY_RESOURCE_PATH),
+            getTestResource(LDAP_MUTATION_RESOURCE_PATH),
             graphQlEndpoint);
   }
 

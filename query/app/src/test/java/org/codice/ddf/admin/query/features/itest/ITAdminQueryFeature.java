@@ -25,9 +25,7 @@ import static org.ops4j.pax.exam.CoreOptions.junitBundles;
 import static org.ops4j.pax.exam.CoreOptions.options;
 
 import java.util.List;
-
 import javax.inject.Inject;
-
 import org.codice.ddf.sync.installer.api.SynchronizedInstaller;
 import org.codice.ddf.test.common.features.FeatureUtilities;
 import org.codice.ddf.test.common.features.TestUtilitiesFeatures;
@@ -45,7 +43,8 @@ import org.ops4j.pax.exam.spi.reactors.PerClass;
 @ExamReactorStrategy(PerClass.class)
 public class ITAdminQueryFeature {
 
-  private static final String FEATURE_REPO_PATH = TestResourcesOptions.getTestResource("/features.xml");
+  private static final String FEATURE_REPO_PATH =
+      TestResourcesOptions.getTestResource("/features.xml");
 
   @Configuration
   public static Option[] examConfiguration() {
@@ -58,7 +57,7 @@ public class ITAdminQueryFeature {
         includeTestResources(),
         addFeatureRepo(FeatureUtilities.toFeatureRepo(FEATURE_REPO_PATH)),
         addBootFeature(TestUtilitiesFeatures.testCommon()),
-            junitBundles());
+        junitBundles());
   }
 
   @Parameterized.Parameters

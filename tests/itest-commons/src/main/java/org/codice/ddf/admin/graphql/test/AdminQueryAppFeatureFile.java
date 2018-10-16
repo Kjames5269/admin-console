@@ -23,12 +23,14 @@ import org.codice.ddf.test.common.features.FeatureRepoImpl;
 
 public class AdminQueryAppFeatureFile {
 
-  public static final FeatureRepo ADMIN_QUERY_FEATURE = new FeatureRepoImpl(maven()
-        .groupId("ddf.features")
-        .artifactId("admin-query")
-        .type("xml")
-        .classifier("features")
-        .version(DependencyVersionResolver.resolver()));
+  public static final FeatureRepo ADMIN_QUERY_FEATURE =
+      new FeatureRepoImpl(
+          maven()
+              .groupId("ddf.features")
+              .artifactId("admin-query")
+              .type("xml")
+              .classifier("features")
+              .version(DependencyVersionResolver.resolver()));
 
   public static final String GRAPHQL_FEATURE = "admin-query-graphql";
 
@@ -52,8 +54,7 @@ public class AdminQueryAppFeatureFile {
 
   public static final String ADMIN_QUERY_EMBEDDED_LDAP = "admin-query-embeddedldap";
 
-  private AdminQueryAppFeatureFile() {
-  }
+  private AdminQueryAppFeatureFile() {}
 
   public static FeatureRepo featureRepo() {
     return ADMIN_QUERY_FEATURE;

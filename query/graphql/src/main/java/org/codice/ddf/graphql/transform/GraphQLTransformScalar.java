@@ -13,10 +13,9 @@
  */
 package org.codice.ddf.graphql.transform;
 
-import org.codice.ddf.admin.api.fields.ScalarField;
-
 import graphql.Scalars;
 import graphql.schema.GraphQLScalarType;
+import org.codice.ddf.admin.api.fields.ScalarField;
 
 public class GraphQLTransformScalar {
 

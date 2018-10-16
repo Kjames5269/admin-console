@@ -13,14 +13,12 @@
  */
 package org.codice.ddf.graphql;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.boon.Boon;
 import org.codice.ddf.admin.api.report.ErrorMessage;
-
-import com.google.common.collect.ImmutableMap;
 
 public class FunctionDataFetcherException extends RuntimeException {
 

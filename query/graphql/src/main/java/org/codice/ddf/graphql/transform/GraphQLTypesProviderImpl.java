@@ -13,13 +13,12 @@
  */
 package org.codice.ddf.graphql.transform;
 
+import graphql.schema.GraphQLType;
+import graphql.servlet.GraphQLTypesProvider;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import graphql.schema.GraphQLType;
-import graphql.servlet.GraphQLTypesProvider;
 
 public class GraphQLTypesProviderImpl<T extends GraphQLType> implements GraphQLTypesProvider {
 

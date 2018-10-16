@@ -17,7 +17,6 @@ import static com.jayway.restassured.RestAssured.given;
 import static junit.framework.TestCase.fail;
 
 import com.jayway.restassured.response.ExtractableResponse;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -116,11 +115,11 @@ public class GraphQlHelper {
 
     private String getResourceAsString(String filePath) {
       File resource = new File(filePath);
-      if(!resource.exists()) {
+      if (!resource.exists()) {
         fail("Resource [" + filePath + "] does not exist");
       }
 
-      try(FileInputStream is = new FileInputStream(resource)) {
+      try (FileInputStream is = new FileInputStream(resource)) {
         return IOUtils.toString(is, "UTF-8");
       } catch (IOException e) {
         fail("Unable to retrieve resource: " + filePath);

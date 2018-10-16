@@ -13,11 +13,10 @@
  */
 package org.codice.ddf.graphql.transform;
 
-import org.codice.ddf.admin.api.fields.EnumField;
-import org.codice.ddf.admin.api.fields.EnumValue;
-
 import graphql.schema.GraphQLEnumType;
 import graphql.servlet.GraphQLTypesProvider;
+import org.codice.ddf.admin.api.fields.EnumField;
+import org.codice.ddf.admin.api.fields.EnumValue;
 
 public class GraphQLTransformEnum {
 

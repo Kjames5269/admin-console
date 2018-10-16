@@ -1,25 +1,29 @@
 package org.codice.ddf.graphql.transform;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLType;
 import graphql.servlet.GraphQLMutationProvider;
 import graphql.servlet.GraphQLProvider;
 import graphql.servlet.GraphQLQueryProvider;
 import graphql.servlet.GraphQLTypesProvider;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class GraphQLProviderImpl  implements GraphQLProvider, GraphQLQueryProvider, GraphQLTypesProvider,
+public class GraphQLProviderImpl
+    implements GraphQLProvider,
+        GraphQLQueryProvider,
+        GraphQLTypesProvider,
         GraphQLMutationProvider {
 
   private List<GraphQLFieldDefinition> queries;
   private List<GraphQLFieldDefinition> mutations;
   private List<GraphQLTypesProvider> typesProviders;
 
-  public GraphQLProviderImpl(List<GraphQLFieldDefinition> queries,
-          List<GraphQLFieldDefinition> mutations, List<GraphQLTypesProvider> typesProviders) {
+  public GraphQLProviderImpl(
+      List<GraphQLFieldDefinition> queries,
+      List<GraphQLFieldDefinition> mutations,
+      List<GraphQLTypesProvider> typesProviders) {
     this.queries = queries;
     this.mutations = mutations;
     this.typesProviders = typesProviders;
@@ -37,7 +41,10 @@ public class GraphQLProviderImpl  implements GraphQLProvider, GraphQLQueryProvid
 
   @Override
   public Collection<GraphQLType> getTypes() {
-    return typesProviders.stream().map(GraphQLTypesProvider::getTypes).flatMap(Collection::stream).collect(
-            Collectors.toList());
+    return typesProviders
+        .stream()
+        .map(GraphQLTypesProvider::getTypes)
+        .flatMap(Collection::stream)
+        .collect(Collectors.toList());
   }
 }

@@ -15,15 +15,13 @@ package org.codice.ddf.graphql;
 
 import static graphql.ErrorType.DataFetchingException;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.codice.ddf.admin.api.report.ErrorMessage;
-
 import graphql.ErrorType;
 import graphql.GraphQLError;
 import graphql.execution.ExecutionPath;
 import graphql.language.SourceLocation;
+import java.util.Collections;
+import java.util.List;
+import org.codice.ddf.admin.api.report.ErrorMessage;
 
 public class DataFetchingGraphQLError implements GraphQLError {
 
