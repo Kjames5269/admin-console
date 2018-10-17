@@ -28,8 +28,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
-import static org.ops4j.pax.exam.CoreOptions.maven;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.replaceConfigurationFile;
 
@@ -40,7 +38,8 @@ import java.util.Map;
 import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.codice.ddf.admin.common.fields.common.PidField;
-import org.codice.ddf.admin.graphql.test.AdminQueryAppFeatureFile;
+import org.codice.ddf.admin.graphql.test.AdminQueryFeatures;
+import org.codice.ddf.admin.graphql.test.AdminQueryTestingFeatures;
 import org.codice.ddf.admin.query.request.SourcesRequestHelper;
 import org.codice.ddf.admin.sources.fields.CswProfile;
 import org.codice.ddf.admin.sources.fields.CswSpatialOperator;
@@ -50,10 +49,7 @@ import org.codice.ddf.admin.sources.fields.type.OpenSearchSourceConfigurationFie
 import org.codice.ddf.admin.sources.fields.type.SourceConfigField;
 import org.codice.ddf.admin.sources.fields.type.WfsSourceConfigurationField;
 import org.codice.ddf.sync.installer.api.SynchronizedInstaller;
-import org.codice.ddf.test.common.DependencyVersionResolver;
-import org.codice.ddf.test.common.features.FeatureImpl;
-import org.codice.ddf.test.common.features.FeatureRepo;
-import org.codice.ddf.test.common.features.FeatureRepoImpl;
+import org.codice.ddf.test.common.features.InstallProfilesFeatures;
 import org.codice.ddf.test.common.features.TestUtilitiesFeatures;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,25 +63,6 @@ import org.ops4j.pax.exam.spi.reactors.PerClass;
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
 public class ITAdminSources {
-
-  public static final FeatureRepo INSTALL_PROFILES_FEATURE =
-      new FeatureRepoImpl(
-          maven()
-              .groupId("ddf.features")
-              .artifactId("install-profiles")
-              .type("xml")
-              .classifier("features")
-              .version(DependencyVersionResolver.resolver()));
-
-  // TODO: tbatie - 10/3/18 - Move this to the test utilities feature in ddf
-  public static final FeatureRepo REST_ASSURED_FEATURE =
-      new FeatureRepoImpl(
-          maven()
-              .groupId("ddf.thirdparty")
-              .artifactId("rest-assured")
-              .type("xml")
-              .classifier("feature")
-              .version(DependencyVersionResolver.resolver()));
 
   public static final String GRAPHQL_ENDPOINT =
       "https://localhost:" + getHttpsPort() + "/admin/hub/graphql";
@@ -127,16 +104,13 @@ public class ITAdminSources {
         // logLevelOption("org.codice.ddf.admin.comp.graphql", "DEBUG"),
         // logLevelOption("org.codice.ddf.graphql", "TRACE"),
         replaceConfigurationFile("/etc/" + POLICY_MNGR_CONFIG_PATH, POLICY_MNGR_CONFIG_FILE),
-        mavenBundle()
-            .groupId("org.codice.ddf.admin.query")
-            .artifactId("itest-commons")
-            .version(DependencyVersionResolver.resolver()),
         addBootFeature(
-            new FeatureImpl(INSTALL_PROFILES_FEATURE.getFeatureFileUrl(), "profile-standard"),
             TestUtilitiesFeatures.testCommon(),
+            AdminQueryTestingFeatures.itestCommons(),
             TestUtilitiesFeatures.awaitility(),
-            new FeatureImpl(REST_ASSURED_FEATURE.getFeatureFileUrl(), "rest-assured"),
-            AdminQueryAppFeatureFile.adminQueryAll()));
+            TestUtilitiesFeatures.restAssured(),
+            InstallProfilesFeatures.profileStandard(),
+            AdminQueryFeatures.adminQueryAll()));
   }
 
   @Before

@@ -25,12 +25,6 @@ class GraphQLTransformationTest extends Specification {
 
     static STATUS_OK = 200
 
-    static STATUS_INVALID_REQUEST = 400
-
-    static MISSING_CONTENT_LENGTH = 411
-
-    static PAYLOAD_TOO_LARGE = 413
-
     static TEST_OBJECT_NAME = TestObjectField.FIELD_NAME
 
     static STRING_ARG_VALUE = TestObjectField.SAMPLE_STRING_VALUE
@@ -105,6 +99,7 @@ class GraphQLTransformationTest extends Specification {
     def setup() {
         servlet = new GraphQLTransformerServlet()
         servlet.setFieldProviders([new TestFieldProvider()])
+        servlet.refreshSchema()
         request = new MockHttpServletRequest()
         response = new MockHttpServletResponse()
     }

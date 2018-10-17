@@ -24,8 +24,6 @@ import static org.codice.ddf.test.common.options.TestResourcesOptions.includeTes
 import static org.codice.ddf.test.common.options.VmOptions.defaultVmOptions;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.ops4j.pax.exam.CoreOptions.maven;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.replaceConfigurationFile;
 
@@ -40,7 +38,8 @@ import java.util.Map;
 import javax.inject.Inject;
 import org.codice.ddf.admin.api.fields.EnumValue;
 import org.codice.ddf.admin.common.fields.common.CredentialsField;
-import org.codice.ddf.admin.graphql.test.AdminQueryAppFeatureFile;
+import org.codice.ddf.admin.graphql.test.AdminQueryFeatures;
+import org.codice.ddf.admin.graphql.test.AdminQueryTestingFeatures;
 import org.codice.ddf.admin.ldap.fields.config.LdapConfigurationField;
 import org.codice.ddf.admin.ldap.fields.config.LdapDirectorySettingsField;
 import org.codice.ddf.admin.ldap.fields.connection.LdapBindMethod.SimpleEnumValue;
@@ -54,10 +53,7 @@ import org.codice.ddf.admin.security.common.fields.wcpm.ClaimsMapEntry;
 import org.codice.ddf.admin.security.common.fields.wcpm.ContextPolicyBin;
 import org.codice.ddf.internal.admin.configurator.actions.ServiceReader;
 import org.codice.ddf.sync.installer.api.SynchronizedInstaller;
-import org.codice.ddf.test.common.DependencyVersionResolver;
-import org.codice.ddf.test.common.features.FeatureImpl;
-import org.codice.ddf.test.common.features.FeatureRepo;
-import org.codice.ddf.test.common.features.FeatureRepoImpl;
+import org.codice.ddf.test.common.features.AppsFeatures;
 import org.codice.ddf.test.common.features.TestUtilitiesFeatures;
 import org.junit.Before;
 import org.junit.Test;
@@ -71,25 +67,6 @@ import org.ops4j.pax.exam.spi.reactors.PerClass;
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
 public class ITAdminSecurity {
-
-  // TODO: tbatie - 10/3/18 - Move this to the test utilities feature in ddf
-  public static final FeatureRepo REST_ASSURED_FEATURE =
-      new FeatureRepoImpl(
-          maven()
-              .groupId("ddf.thirdparty")
-              .artifactId("rest-assured")
-              .type("xml")
-              .classifier("feature")
-              .version(DependencyVersionResolver.resolver()));
-
-  public static final FeatureRepo APPS_FEATURE =
-      new FeatureRepoImpl(
-          maven()
-              .groupId("ddf.features")
-              .artifactId("apps")
-              .type("xml")
-              .classifier("features")
-              .version(DependencyVersionResolver.resolver()));
 
   public static final String POLICY_MNGR_CONFIG_PATH =
       "/org.codice.ddf.security.policy.context.impl.PolicyManager.cfg";
@@ -150,20 +127,13 @@ public class ITAdminSecurity {
         replaceConfigurationFile("/etc/" + POLICY_MNGR_CONFIG_PATH, POLICY_MNGR_CONFIG_FILE),
         replaceConfigurationFile(
             "/security" + ADMIN_QUERY_SECURITY_POLICY_PATH, ADMIN_QUERY_SECURITY_POLICY_FILE),
-
-        // TODO: tbatie - 10/16/18 - SHould move to some feature
-        mavenBundle()
-            .groupId("org.codice.ddf.admin.query")
-            .artifactId("itest-commons")
-            .version(DependencyVersionResolver.resolver()),
-
-        // TODO: tbatie - 10/16/18 - Start bare minimum of these features
         addBootFeature(
-            new FeatureImpl(APPS_FEATURE.getFeatureFileUrl(), "security-services-app"),
             TestUtilitiesFeatures.testCommon(),
+            AdminQueryTestingFeatures.itestCommons(),
             TestUtilitiesFeatures.awaitility(),
-            new FeatureImpl(REST_ASSURED_FEATURE.getFeatureFileUrl(), "rest-assured"),
-            AdminQueryAppFeatureFile.adminQueryAll()));
+            TestUtilitiesFeatures.restAssured(),
+            AppsFeatures.securityServicesApp(),
+            AdminQueryFeatures.adminQueryAll()));
   }
 
   @Before
